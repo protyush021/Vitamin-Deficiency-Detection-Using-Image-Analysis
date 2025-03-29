@@ -27,7 +27,7 @@ decorator
 Django
 django-crispy-forms
 django-pandas
-dlib
+dlib-bin
 dm-tree
 dnspython
 et-xmlfile
