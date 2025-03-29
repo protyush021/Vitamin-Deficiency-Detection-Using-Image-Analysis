@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitamin Deficiency Detection | MediScan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        header nav ul li a:hover {
+            color: #e0e0e0;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .intro-section, .upload-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .intro-section h1 {
+            color: #007bff;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .intro-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .upload-section h2 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button#start-camera {
+            background: #28a745;
+            color: white;
+        }
+
+        button#capture {
+            background: #17a2b8;
+            color: white;
+        }
+
+        button#use-photo {
+            background: #007bff;
+            color: white;
+        }
+
+        button#retake-photo {
+            background: #dc3545;
+            color: white;
+        }
+
+        button[type="submit"] {
+            background: #007bff;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        #camera-container {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        video, img {
+            width: 100%;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #captured-image {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        form {
+            margin-top: 1rem;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        footer .copyright {
+            color: #d3d3d3;
+        }
+
+        footer .footer-links {
+            text-align: right;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            header nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .main-container {
+                flex-direction: column;
+                padding: 0 1rem;
+            }
+
+            .intro-section, .upload-section {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header .logo {
+                font-size: 1.5rem;
+            }
+
+            .intro-section h1 {
+                font-size: 1.5rem;
+            }
+
+            .upload-section h2 {
+                font-size: 1.2rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+                padding: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">MediScan</div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="intro-section">
+            <h1>Vitamin Deficiency Detection</h1>
+            <p>Welcome to MediScan, your trusted tool for detecting potential vitamin deficiencies through advanced image analysis. Upload a photo or use your camera to get started.</p>
+        </div>
+
+        <div class="upload-section">
+            <h2>Get Started</h2>
+            <button id="start-camera"><i class="fas fa-camera"></i> Open Camera</button>
+
+            <div id="camera-container">
+                <video id="camera" autoplay></video>
+                <canvas id="canvas" style="display: none;"></canvas>
+                <img id="captured-image">
+
+                <button id="capture"><i class="fas fa-camera-retro"></i> Capture</button>
+                <button id="use-photo" style="display: none;"><i class="fas fa-check"></i> Use Photo</button>
+                <button id="retake-photo" style="display: none;"><i class="fas fa-redo"></i> Retake</button>
+            </div>
+
+            <form id="photo-form" method="post" action="/" enctype="multipart/form-data">
+                <input type="file" name="image" id="image-input" accept="image/*">
+                <input type="hidden" name="captured_image" id="captured_image">
+                <button type="submit" id="upload-button"><i class="fas fa-upload"></i> Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <p class="copyright">© 2025 MediScan. All rights reserved.</p>
+            <p class="footer-links">
+                <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a> | <a href="/contact">Contact Us</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        const cameraButton = document.getElementById('start-camera');
+        const cameraContainer = document.getElementById('camera-container');
+        const video = document.getElementById('camera');
+        const canvas = document.getElementById('canvas');
+        const captureButton = document.getElementById('capture');
+        const usePhotoButton = document.getElementById('use-photo');
+        const retakeButton = document.getElementById('retake-photo');
+        const photoForm = document.getElementById('photo-form');
+        const capturedImageInput = document.getElementById('captured_image');
+        const capturedImage = document.getElementById('captured-image');
+        const uploadButton = document.getElementById('upload-button');
+        const imageInput = document.getElementById('image-input');
+
+        let stream = null;
+
+        cameraButton.addEventListener('click', () => {
+            cameraContainer.style.display = 'block';
+            capturedImage.style.display = 'none';
+            video.style.display = 'block';
+            captureButton.style.display = 'block';
+            usePhotoButton.style.display = 'none';
+            retakeButton.style.display = 'none';
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(mediaStream => {
+                    stream = mediaStream;
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error("Camera access denied:", err);
+                });
+        });
+
+        captureButton.addEventListener('click', () => {
+            const ctx = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            const targetWidth = 500;
+            const aspectRatio = video.videoHeight / video.videoWidth;
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = targetWidth;
+            tempCanvas.height = targetWidth * aspectRatio;
+            tempCanvas.getContext('2d').drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
+
+            const imageData = tempCanvas.toDataURL('image/jpeg', 0.7);
+            capturedImage.src = imageData;
+            capturedImage.style.display = 'block';
+
+            video.style.display = 'none';
+            captureButton.style.display = 'none';
+            usePhotoButton.style.display = 'block';
+            retakeButton.style.display = 'block';
+
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+            }
+
+            capturedImageInput.value = imageData;
+        });
+
+        usePhotoButton.addEventListener('click', (e) => {
+            e.preventDefault();
+        
+            if (capturedImageInput.value.trim() === "") {
+                alert("No image detected. Please capture an image first.");
+                return;
+            }
+        
+            const formData = new FormData();
+            formData.append("captured_image", capturedImageInput.value);
+        
+            fetch("/", {
+                method: "POST",
+                body: formData,
+            })
+            .then(response => response.text())
+            .then(html => {
+                document.open();
+                document.write(html);
+                document.close();
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        retakeButton.addEventListener('click', () => {
+            capturedImage.style.display = 'none';
+            capturedImage.src = '';
+
+            video.style.display = 'block';
+            captureButton.style.display = 'block';
+            usePhotoButton.style.display = 'none';
+            retakeButton.style.display = 'none';
+
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(mediaStream => {
+                    stream = mediaStream;
+                    video.srcObject = stream;
+                })
+                .catch(err => {
+                    console.error("Camera access denied:", err);
+                });
+        });
+
+        // Check if file is selected before upload
+        uploadButton.addEventListener('click', (e) => {
+            if (!imageInput.files.length && !capturedImageInput.value) {
+                e.preventDefault();
+                alert("Please select an image file or capture a photo before uploading.");
+            }
+        });
+    </script>
+</body>
+</html>
