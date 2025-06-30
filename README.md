@@ -25,17 +25,6 @@ This project presents a non-invasive, AI-powered framework to detect vitamin def
 
 ---
 
-## 📂 Project Structure
-├── dataset/ # Image dataset (preprocessed)
-├── models/ # Saved model weights
-├── static/ # CSS, JS, image files for web UI
-├── templates/ # HTML templates (Flask)
-├── app.py # Main Flask backend
-├── preprocess.py # Image preprocessing functions
-├── predictor.py # Model loading and prediction
-├── requirements.txt # Python dependencies
-└── README.md # Project documentation
----
 
 ## 🔍 How It Works
 
